@@ -69,6 +69,10 @@ flags.DEFINE_integer(
     "Sequences longer than this will be truncated, and sequences shorter "
     "than this will be padded.")
 
+flags.DEFINE_integer(
+    "num_hidden_layers", -1,
+    "num hidden layers.")
+
 flags.DEFINE_bool("do_train", False, "Whether to run training.")
 
 flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
@@ -803,6 +807,7 @@ def main(_):
         "At least one of `do_train`, `do_eval` or `do_predict' must be True.")
 
   bert_config = modeling.BertConfig.from_json_file(FLAGS.bert_config_file)
+  bert_config.num_hidden_layers = FLAGS.num_hidden_layers if FLAGS.num_hidden_layers > 0 else bert_config.num_hidden_layers
 
   if FLAGS.max_seq_length > bert_config.max_position_embeddings:
     raise ValueError(
